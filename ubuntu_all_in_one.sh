@@ -15,8 +15,8 @@ echo -e "\n${RED}Docker installed. Please log out and back in for changed groups
 sudo sh cluster_up_linux.sh
 
 # Wait for cluster to be online
-echo -e "\n${RED}Cluster setup succeeded, now waiting for it to boot up. This can take a few minutes.${DEFAULTCOLOR}"
-while ! sudo kubectl get pod &> /dev/null; do
+echo -e "\n${RED}Cluster setup succeeded, now waiting for it to boot up. You will see connection errors during this time - this is a result of polling, normal behavior and should not last longer than 3 minutes.${DEFAULTCOLOR}"
+while ! sudo kubectl get pod; do
 sleep 1
 done
 echo "\n${RED}Kubernetes cluster online.${DEFAULTCOLOR}"
@@ -25,5 +25,5 @@ echo "\n${RED}Kubernetes cluster online.${DEFAULTCOLOR}"
 sudo sh start_services.sh
 
 # Monitor containers coming up. This will take a while.
-echo -e "\n${RED}Lucida services initiated. It will take a while (5 minutes?) until all services are running. You can then open http://localhost:30000/ and start using Lucida.${DEFAULTCOLOR}"
+echo -e "\n${RED}Lucida services initiated. It will take a while (up to 15 minutes) until all services are running. You can then open http://localhost:30000/ and start using Lucida.${DEFAULTCOLOR}"
 sudo watch kubectl get pod
