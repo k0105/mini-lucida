@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: imc
+  name: imc-controller
+spec:
+  replicas: 1
+  selector:
+    name: imc
+  template:
+    metadata:
+      labels:
+        name: imc
+    spec:
+      containers:
+      - image: claritylab/lucida:v2.2
+        command: ['/bin/sh', '-c']
+        args: ['cd $LUCIDAROOT/djinntonic/imc && ./IMCServer']
+        name: imc
+        ports:
+        - containerPort: 8085
+          name: thrift

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: asrmaster
+  name: asrmaster-controller
+spec:
+  replicas: 1
+  selector:
+    name: asrmaster
+  template:
+    metadata:
+      labels:
+        name: asrmaster
+    spec:
+      containers:
+      - image: claritylab/lucida:v2.2
+        command: ['/bin/sh', '-c']
+        args: ['cd $LUCIDAROOT/speechrecognition/kaldi_gstreamer_asr/ && source $LUCIDAROOT/../tools/python_2_7_9/bin/activate && python kaldigstserver/master_server.py --port=8081']
+        name: asrmaster
+        ports:
+        - containerPort: 8081
+          name: http-server

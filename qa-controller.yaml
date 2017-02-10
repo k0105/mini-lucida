@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: qa
+  name: qa-controller
+spec:
+  replicas: 1
+  selector:
+    name: qa
+  template:
+    metadata:
+      labels:
+        name: qa
+    spec:
+      dnsPolicy: Default
+      containers:
+      - image: claritylab/lucida:v2.2
+        command: ['/bin/sh', '-c']
+        # Add " && export wiki_indri_index=/usr/local/lucida/lucida/questionanswering/OpenEphyra/db/wiki_indri_index" if you don't want to use Wikipedia as an additional knowledge base.
+        args: ['cd $LUCIDAROOT/questionanswering/OpenEphyra/ && ./start_server.sh']
+        name: qa
+        ports:
+        - containerPort: 8083
+          name: thrift
+        volumeMounts:
+          - mountPath: /usr/local/lucida/lucida/questionanswering/OpenEphyra/db
+            name: openephyra-persistent-storage
+            readOnly: false
+      volumes:
+        - hostPath:
+            # Modify the path below.
+            path: /home/lucida_data/openephyra
+            # Move "wiki_indri_index" to the above directory
+            # if it has been downloaded from "../download_wiki_index.sh".
+          name: openephyra-persistent-storage

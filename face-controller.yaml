@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: face
+  name: face-controller
+spec:
+  replicas: 1
+  selector:
+    name: face
+  template:
+    metadata:
+      labels:
+        name: face
+    spec:
+      containers:
+      - image: claritylab/lucida:v2.2
+        command: ['/bin/sh', '-c']
+        args: ['cd $LUCIDAROOT/djinntonic/face && ./FACEServer']
+        name: face
+        ports:
+        - containerPort: 8086
+          name: thrift
